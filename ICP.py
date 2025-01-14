@@ -53,7 +53,7 @@ def compute_transformation(X_centered, P_centered):
     if np.linalg.det(R) < 0:
         U[:, -1] *= -1
         R = np.dot(U, Vt)
-    t = np.mean(X_centered, axis=0) - np.dot(np.mean(P_centered, axis=0), R.T)  # translation
+    t = np.zeros(X_centered.shape[1])
     return R, t
 
 def apply_transformation(P, R, t):
@@ -92,7 +92,7 @@ def rotation_experiments(X, P, angles):
 
 if __name__ == "__main__":
     X = np.array([[-1.5, 2.5], [0.5, 3.5], [1.5, 4.5], [2.5, 5.5], [3.5, 4.5], [4.5, 3.5], [5.5, 2.5]])
-    P0 = np.array([[-0.5, 3], [0.4, 4.1], [1.3, 5.2], [2.2, 6.3], [3.1, 54], [4.0, 4.5], [4.9, 3.6]])
+    P0 = np.array([[-0.5, 3], [0.4, 4.1], [1.3, 5.2], [2.2, 6.3], [3.1, 5.4], [4.0, 4.5], [4.9, 3.6]])
 
     X_centroid = centroid(X)
     X_centered = centered(X, X_centroid)
