@@ -53,7 +53,7 @@ def compute_transformation(X_centered, P_centered):
     if np.linalg.det(R) < 0:
         U[:, -1] *= -1
         R = np.dot(U, Vt)
-    t = np.zeros(X_centroid.shape[1]) 
+    t = np.mean(X_centered, axis=0) - np.dot(np.mean(P_centered, axis=0), R.T)  # translation
     return R, t
 
 def apply_transformation(P, R, t):
@@ -64,7 +64,7 @@ def ICP(X, P, iterations=4, distance_metric="point"):
         if distance_metric == "point":
             P_closest = closest_point_to_point(X, P)
         elif distance_metric == "line":
-            P_closest = closest_point_to_line(x, P)
+            P_closest = closest_point_to_line(X, P)
         R, t = compute_transformation(X, P_closest)
         P = apply_transformation(P, R, t)
         yield P, R, t
@@ -99,6 +99,13 @@ if __name__ == "__main__":
 
     P_centroid = centroid(P0)
     P_centered = centered(P0, P_centroid)
+
+    #test
+    print("X_centroid:", X_centroid)
+    print("P_centroid:", P_centroid)
+    print("X_centered:", X_centered)
+    print("P_centered:", P_centered)
+
 
     # P2P icp
     iterations_point = list(ICP(X_centered, P_centered, distance_metric="point"))
